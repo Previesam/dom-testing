@@ -1,0 +1,88 @@
+section.tasks {
+  max-height: 90%;
+  width: 100%;
+  display: grid;
+  grid-template: repeat(12, 1fr) / repeat(12, 1fr);
+}
+
+div.task-actions {
+  width: 100%;
+  grid-column: 1/-1;
+  grid-row: 1fr;
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  justify-content: space-between;
+}
+
+.task-actions > input {
+  height: 25px;
+  border-radius: 0.5rem;
+  border: 1px solid grey;
+  color: rgb(143, 143, 143);
+}
+
+input:focus {
+  outline: none;
+  border-radius: 0.5rem;
+  border: 2px solid blue;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+div.task-container {
+  width: 100%;
+  grid-column: 1/-1;
+  grid-row: 2/-1;
+  border-radius: 1rem;
+  grid-template: repeat(12, 1fr) / repeat(12, 1fr);
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  padding-top: 10px;
+  overflow-y: auto;
+  row-gap: 10px;
+}
+
+div.task-header {
+  width: 100%;
+  background-color: white;
+  border-radius: 0.5rem;
+  display: grid;
+  grid-template-columns: 0.2fr 11.3fr 0.5fr;
+  padding: 10px;
+  align-items: center;
+  column-gap: 10px;
+}
+
+div.task-header > div > form > input {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  height: 17px;
+}
+
+.input-field > form, .input-field > form > input  {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.task-header > p > span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: grey;
+}
+
+p.menu-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}

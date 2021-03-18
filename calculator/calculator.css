@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* main {
+  min-height: 100vh;
+  background: linear-gradient(
+    to right bottom,
+    rgba(179, 255, 255, 0.7),
+    rgba(179, 255, 255, 0.3)
+  );
+  display: grid;
+  justify-content: center;
+  align-items: center;
+} */
+
+.calculator {
+  width: 320px;
+  height: 70vh;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.5)
+  );
+  border-radius: 1rem;
+  display: grid;
+  grid-template: repeat(12, 1fr) / repeat(12, 1fr);
+  box-shadow: 4px 4px grey;
+}
+
+div.display {
+  grid-column: 1/-1;
+  grid-row: 1/4;
+  border: 1px solid grey;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  width: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  justify-items: end;
+}
+
+div.small-display {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+div.large-display {
+  padding-right: 10px;
+  padding-left: 10px;
+  font-weight: 900;
+  font-size: 50px;
+  overflow-x: auto;
+  max-width: 90%;
+}
+
+div.inputs {
+  grid-column: 1/-1;
+  grid-row: 4/-1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0;
+  width: 100%;
+  height: auto;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border: 1px solid grey;
+
+}
+
+div.inputs > div {
+  font-weight:500;
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 0.1rem solid grey;
+  border-right: 0.1rem solid grey;
+}
+
+div.inputs > div:hover {
+  text-align: center;
+  font-size: large;
+  background-color: whitesmoke;
+}
+
+div.span-ac {
+  grid-column: 1 / span 2;
+}
+
+div.span-3 {
+  grid-column: 3 / span 2;
+}
+
+
+div.last {
+  border-bottom-right-radius: 1rem;
+}
+
+div.first {
+  border-bottom-left-radius: 1rem;
+}

@@ -1,0 +1,23 @@
+<section class="tasks">
+    <div class="task-actions">
+        <div style="padding: 10px;">Todo List</div>
+        <input oninput="handleInput(event)" type="text" placeholder="Search Task">
+        
+    </div>
+    <div class="task-container">
+        <div class="task-header">
+            <p class="menu-btn"><span></span><span></span><span></span></p>
+            <div class="input-feild">
+                <form onsubmit="createTodo(event); return false" action="/" method="POST">
+                    <input type="text" name="todoInput" value="todoInput" id="" placeholder="New Todo">
+                </form>
+            </div>
+            <input type="checkbox" name="" id="">
+        </div>
+        <div class="task-header">
+            <p class="menu-btn"><span></span><span></span><span></span></p>
+            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, eos.</div>
+            <input type="checkbox" name="" id="" onchange="handleChange(event)">
+        </div>
+    </div>
+</section>
