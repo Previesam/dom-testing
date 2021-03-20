@@ -8,8 +8,9 @@
         <div class="task-header">
             <p class="menu-btn"><span></span><span></span><span></span></p>
             <div class="input-feild">
-                <form onsubmit="createTodo(event); return false" action="/" method="POST">
-                    <input type="text" name="todoInput" value="todoInput" id="" placeholder="New Todo">
+                <form id="todoForm" action="/" method="POST">
+                    <input type="text" name="todoInput" value="" id="" placeholder="New Todo">
+                    <input style="display: none;" type="submit" value="">
                 </form>
             </div>
             <input type="checkbox" name="" id="">

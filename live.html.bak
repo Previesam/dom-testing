@@ -1,0 +1,356 @@
+<style>
+        body, p, h1, div, section, main {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+    
+        .chat-box {
+            box-sizing: border-box;
+            max-width: 360px;
+            position: fixed;
+            bottom: 45px;
+            right: 20px;
+            margin-left: 20px;
+            max-height: 400px;
+            font-size: 14px;
+            padding: 0;
+            font-family: sans-serif;
+            border-radius: 1rem;
+            display: grid;
+            grid-template: repeat(12, 1fr)/repeat(12, 1fr);
+            color: white;
+            font-weight: 500;
+        }
+    
+        .chat-header {
+            border-top-right-radius: 0.5rem;
+            border-top-left-radius: 0.5rem;
+            background-color: blue;
+            padding: 15px;
+            grid-column: 1/-1;
+            grid-row: 1/4;
+            position: relative;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            border: 1px solid blue;
+			line-height: 1.5em;
+            color: rgba(255, 255, 255, 1);
+        }
+    
+        .chat-header > span.close-chat {
+            font-weight: 700;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            line-height: 2px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    
+        .chat-operators {
+            grid-column: 1/-1;
+            grid-row: 4/10;
+            padding: 15px;
+            border-bottom-right-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+            background-color: white;
+            color: black;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            overflow-y: auto;
+            border: 1px solid #f5f5f5;
+            position: relative;
+        }
+    
+        .chat-icon {
+            grid-column: 1/-1;
+            grid-row: 10/-1;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    
+        .chat-area {
+            grid-column: 1/-1;
+            grid-row: 1/-1;
+            display: grid;
+            grid-template: repeat(12, 1fr)/repeat(12, 1fr);
+        }
+    
+        .chat-arrow-down {
+            position: absolute;
+            left: 15px;
+            bottom: -10px;
+            width: 0; 
+            height: 0; 
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+        }
+    
+        .chat-icon > svg {
+            fill: white;
+            width: 40px;
+            height: 40px;
+            padding: 5px;
+            background-color: #4dc247;
+            border-radius: 50%;
+            box-shadow: 2px 2px 6px
+            rgba(0,0,0,0.4);
+            /* box-shadow: 2px 2px 11px rgba(0,0,0,0.7); */
+            z-index: 10;
+            cursor: pointer;
+            outline: none;
+        }
+    
+        .chat-icon > svg {
+            box-shadow: 2px 2px 11px rgba(0,0,0,0.7);
+        }
+    
+        .chat-area.hidden {
+            display: none !important;
+            transition: all;
+        }
+    
+        div.operators {
+            display: flex;
+			flex-direction: column;
+            grid-template-columns: 1fr;
+            column-gap: 5px;
+			justify-content: space-around;
+        }
+    
+        div.operators > a {
+            text-decoration: none;
+            height: 80px;
+            display: grid;
+            grid-template-columns: 1fr 5fr;
+            align-items: center;
+            column-gap: 10px;
+            border-radius: 0.3rem;
+            border: 1px solid #f5f5f5;
+            color: rgba(85, 85, 85, 1);
+        }
+    
+        div.operators > a:hover {
+            background-color: #f5f5f5;
+        }
+	
+		div.operators > a:focus {
+            outline: none;
+        }
+    
+        .op-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            position: relative;
+        }
+    
+        .op-logo::after {
+            content: '';
+            display: block;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: transparent url(https://eyemastersng.com/wp-content/uploads/2021/03/logo-green-small.png) center center no-repeat;
+            background-size: cover;
+            z-index: 4;
+        }
+    
+        .op-logo > img {
+            height: 100%;
+            border-radius: 50%;
+        }
+    
+        .op-info {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .op-info > .op-location {
+            font-size: 12px;
+            line-height: 1.5em;
+            opacity: .6;
+        }
+    
+        .op-info > .op-name {
+            color: rgba(85, 85, 85, 1);
+            font-weight: bold;
+        }
+    
+    /* width */
+    ::-webkit-scrollbar {
+    width: 2px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+    /* background: #424242e3; */
+    background: transparent;
+    border-radius: 2px;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    }
+    </style>
+    <script defer>
+
+        var newDiv = document.createElement('div');
+        var body = document.querySelector("body");
+    
+        newDiv.classList.add("chat-box");
+    
+        var text = `<div class="chat-area hidden">
+                <div class="chat-header"> Hi there,
+                    Welcome to Eyemasters. Click on one of our representatives below to chat with us on Whatsapp.<span onclick="closeChat()" class="close-chat">x</span></div>
+                <div class="chat-operators">
+                    <div class="operators">
+                        <a href="https://api.whatsapp.com/send?phone=2348147201169&text=Hello%20Ijeoma...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Lekki, Lagos</span>
+                                <span class="op-name">Ijeoma</span>
+                            </div>
+                        </a>
+                        <!-- <a href="https://api.whatsapp.com/send?phone=2347060830169&text=Hello%20Gift...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Osapa, Lagos</span>
+                                <span class="op-name">Gift</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2348179714143&text=Hello%20Vivian...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Ajah, Lagos</span>
+                                <span class="op-name">Vivian</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2347069598925&text=Hello%20Ijeoma...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Agungi, Lagos</span>
+                                <span class="op-name">Ijeoma</span>
+                            </div>
+                        </a> -->
+                        <a href="https://api.whatsapp.com/send?phone=2348147201168&text=Hello%20Labake...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Palmgrove, Lagos</span>
+                                <span class="op-name">Labake</span>
+                            </div>
+                        </a>
+                        <!-- <a href="https://api.whatsapp.com/send?phone=2348023693802&text=Hello%20Faustina...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Ilupeju, Lagos</span>
+                                <span class="op-name">Faustina</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2348184782619&text=Hello%20Chinonso...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Isolo, Lagos</span>
+                                <span class="op-name">Chinonso</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2348030412880&text=Hello%20Ogochukwu...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Alaba, Lagos</span>
+                                <span class="op-name">Ogochukwu</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2348147737385&text=Hello%20Patience...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Ota, Ogun State</span>
+                                <span class="op-name">Patience</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2349083769625&text=Hello%20Busayo...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Kubwa, Abuja</span>
+                                <span class="op-name">Busayo</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2348060742036&text=Hello%20Oluchi...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Asaba, Delta</span>
+                                <span class="op-name">Oluchi</span>
+                            </div>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?phone=2349019916086&text=Hello%20Darlington...%20I%20am%20chatting%20from%20Eyemasters%20website" target="_blank">
+                            <div class="op-logo">
+                                <img src="https://eyemastersng.com/wp-content/uploads/2021/03/15.jpg" alt="">
+                            </div>
+                            <div class="op-info">
+                                <span class="op-location">Utako, Abuja</span>
+                                <span class="op-name">Darlington</span>
+                            </div>
+                        </a> -->
+                    </div> 
+                  <div class="chat-arrow-down"></div>
+                </div>
+            </div>
+            <div class="chat-icon">
+                    <svg onclick="toggleChatBox()" viewBox="0 0 32 32" class="whatsapp-ico"><path d=" M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z" fill-rule="evenodd"></path></svg>
+    </div>`;
+    
+        window.addEventListener("load", () => {
+            newDiv.innerHTML = text;
+            newDiv.style.zIndex = 5000;
+            document.body.appendChild(newDiv);
+        });
+    
+        var toggleChatBox = () => {
+            var chatArea = document.querySelector('.chat-area');
+            chatArea.classList.toggle('hidden');
+        }
+    
+        var closeChat = () => {
+            var chatArea = document.querySelector('.chat-area');
+            chatArea.classList.toggle("hidden");
+        }
+    
+    </script>
