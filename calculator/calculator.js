@@ -73,8 +73,8 @@ var showCalculator = async (e) => {
           if (key === "." && currentNumber.includes(".")) return;
 
           if (key === "." && currentNumber === "") {
-            currentNumber = "0.";
-            updateDisplay(true);
+            currentNumber = ".";
+            updateDisplay();
             return;
           }
 
@@ -116,15 +116,21 @@ var showCalculator = async (e) => {
           // Handles the equals operator click event
 
           if (key === "=") {
-            process();
-
-            return;
+            if (!previousNumber && !initialNumber) {
+              return;
+            } else {
+              process();
+              return;
+            }
           }
 
           if (key === "Enter") {
-            process();
-
-            return;
+            if (!previousNumber && !initialNumber) {
+              return;
+            } else {
+              process();
+              return;
+            }
           }
 
           if (key === "Delete") {
@@ -181,7 +187,7 @@ var showCalculator = async (e) => {
       var process = () => {
         // Handles when no current number to process
 
-        if (!currentNumber) {
+        if (!currentNumber && previousNumber) {
           currentNumber = previousNumber; // Sets the previous number as the current
           updateDisplay(true); // Updates the display
           previousNumber = ""; // Clears the previous number
@@ -204,12 +210,16 @@ var showCalculator = async (e) => {
         currentNumber = "";
         previousOperand = "";
         previousNumber = "";
+        initialNumber = "";
       };
 
       var del = () => {
-        if (currentNumber.length > 1) {
+        if (currentNumber.length > 3) {
           currentNumber = currentNumber.substr(0, currentNumber.length - 1);
           updateDisplay(true);
+        } else if (currentNumber.length <= 3) {
+          currentNumber = currentNumber.substr(0, currentNumber.length - 1);
+          updateDisplay();
         } else {
           currentNumber = "";
           updateDisplay();
